@@ -7,5 +7,11 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="basicplayer-3.0.0.0" level="project" />
+    <orderEntry type="library" name="jlayer-1.0.1.4" level="project" />
+    <orderEntry type="library" name="junit-3.8.2" level="project" />
+    <orderEntry type="library" name="mp3spi-1.9.5.4" level="project" />
+    <orderEntry type="library" name="slf4j-api-1.7.12" level="project" />
+    <orderEntry type="library" name="tritonus-share-0.3.7.4" level="project" />
   </component>
 </module>
