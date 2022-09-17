@@ -4,11 +4,12 @@ import java.io.File;
 
 public class Reproducir_Musica {
 
-    private BasicPlayer player;
+    private static BasicPlayer player;
 
     
-    public void Play() throws Exception{
+    public static void Play() throws Exception{
         player= new BasicPlayer();
+        player.open(new File("C:/Users/chris/Music/YouSeeBigGirl.mp3"));
         player.play();
     }
 
