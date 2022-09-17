@@ -13,15 +13,7 @@ public class Double_CircularLinkedList {
     }
 
     public boolean isEmpty(){
-       if (this.head == this.last){
-        if (this.head == null){
-            return this.last==null;
-        } else{
-            return false;
-        }
-       } else{
-        return false;
-       }
+        return this.head == this.last && this.head== null;
     }
 
     public int size(){
@@ -37,6 +29,7 @@ public class Double_CircularLinkedList {
             this.head.setPrevious(newNode);
             newNode.setNext(this.head);
             newNode.setPrevious(this.last);
+            this.last.setNext(newNode);
             this.head = newNode;
         }
         this.size++;
@@ -51,6 +44,7 @@ public class Double_CircularLinkedList {
             this.last.setNext(newNode);
             newNode.setNext(this.head);
             newNode.setPrevious(this.last);
+            this.head.setPrevious(newNode);
             this.last= newNode;
         }
         this.size++;
@@ -79,5 +73,13 @@ public class Double_CircularLinkedList {
         return null;
     }
 
+
+    public void displayList(){
+        Node current= this.head;
+        while (current!=null){
+            System.out.println(current.getData());
+            current= current.getNext();
+        }
+    }
     
 }
