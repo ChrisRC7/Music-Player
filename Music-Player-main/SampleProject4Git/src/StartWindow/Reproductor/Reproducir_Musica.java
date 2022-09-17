@@ -9,7 +9,7 @@ public class Reproducir_Musica {
     
     public static void Play() throws Exception{
         player= new BasicPlayer();
-        player.open(new File("C:/Users/chris/Music/YouSeeBigGirl.mp3"));
+        player.open(new File("test.mp3"));
         player.play();
     }
 
