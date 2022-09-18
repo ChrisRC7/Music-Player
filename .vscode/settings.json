@@ -6,6 +6,7 @@
         "c:\\Program Files\\Java\\java-musicplayer\\junit-3.8.2.jar",
         "c:\\Program Files\\Java\\java-musicplayer\\mp3spi-1.9.5.4.jar",
         "c:\\Program Files\\Java\\java-musicplayer\\slf4j-api-1.7.12.jar",
-        "c:\\Program Files\\Java\\java-musicplayer\\tritonus-share-0.3.7.4.jar"
+        "c:\\Program Files\\Java\\java-musicplayer\\tritonus-share-0.3.7.4.jar",
+        "c:\\Program Files\\Java\\opencsv-5.7.0.jar"
     ]
 }

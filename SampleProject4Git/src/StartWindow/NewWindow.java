@@ -1,12 +1,16 @@
 package StartWindow;
 
 import javax.swing.*;
+import StartWindow.Usuarios.*;
+
+
 import java.awt.*;
 
-public class NewWindow extends Credentials {
+public class NewWindow {
     JFrame frame = new JFrame();
     JLabel label = new JLabel("New Class");
-    NewWindow(){
+    public NewWindow() {
+
         label.setBounds(0,0,300,50);
         label.setFont(new Font(null, Font.PLAIN,25));
         frame.setTitle("CE Music Player");

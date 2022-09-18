@@ -4,13 +4,25 @@ import java.io.File;
 
 public class Reproducir_Musica {
 
-    private static BasicPlayer player;
+    private  BasicPlayer player;
 
     
-    public static void Play() throws Exception{
+    public void Play() throws Exception{
+        player= new BasicPlayer();
+        player.open(new File("Enemy.mp3"));
+        player.play();
+    }
+
+
+    public void Play2() throws Exception{
         player= new BasicPlayer();
         player.open(new File("test.mp3"));
         player.play();
+    }
+
+    public void Status(){
+      
+        System.out.println(player.getStatus());
     }
 
     public void EscogerMusica(String ruta) throws Exception{

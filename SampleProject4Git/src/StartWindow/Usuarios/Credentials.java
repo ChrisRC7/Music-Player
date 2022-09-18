@@ -1,6 +1,9 @@
-package StartWindow;
+package StartWindow.Usuarios;
 
 import javax.swing.*;
+
+import StartWindow.NewWindow;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
