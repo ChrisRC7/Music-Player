@@ -1,8 +1,10 @@
 package StartWindow.Usuarios;
 
+import StartWindow.Main.Main;
+
 import javax.swing.*;
 
-import StartWindow.NewWindow;
+//import StartWindow.NewWindow;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -16,7 +18,7 @@ public class Credentials extends JFrame implements ActionListener {
     JTextField email;
     JTextField province;
 
-    Credentials(){
+    public Credentials(){
         //Methods for the screen's interface
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new FlowLayout());
@@ -57,7 +59,12 @@ public class Credentials extends JFrame implements ActionListener {
             if (username.getText().equals("Chris") && (pass.getText().equals("pass"))){
                 System.out.println("Access allowed");
                 this.dispose(); //Closes current window
-                NewWindow mainWindow = new NewWindow();
+                Main ReproductorVentana = new Main();
+                ReproductorVentana.setBounds(0, 0, 500, 500); //Tamaño provicional, posiblemente cambie
+                ReproductorVentana.setVisible(true);
+                ReproductorVentana.setTitle("El mp3 con la tula mas grande que hay");
+                ReproductorVentana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                //NewWindow mainWindow = new NewWindow();
             }else{
                 System.out.println("Access denied");
             }

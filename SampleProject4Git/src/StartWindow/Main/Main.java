@@ -1,6 +1,8 @@
 package StartWindow.Main;
 import java.io.FileReader;
 import java.io.FileWriter;
+
+import StartWindow.Usuarios.Credentials;
 import com.opencsv.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -161,15 +163,6 @@ public class Main extends JFrame implements ActionListener {
 
     //Main Method
     public static void main(String[] args){
-        //Credentials launchPage = new Credentials();
-        Main RepdroductorVentana = new Main();
-        RepdroductorVentana.setBounds(0, 0, 500, 500); //Tamaño provicional, posiblemente cambie
-        RepdroductorVentana.setVisible(true);
-        RepdroductorVentana.setTitle("El mp3 con la tula mas grande que hay");
-        RepdroductorVentana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        
-        
+        new Credentials();
     }
-
 }
