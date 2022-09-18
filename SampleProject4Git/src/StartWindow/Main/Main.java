@@ -4,22 +4,24 @@ import java.io.FileWriter;
 
 import StartWindow.Usuarios.Credentials;
 import com.opencsv.*;
+
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import javax.swing.*;
 import java.awt.event.*;
-import java.io.ObjectOutputStream.PutField;
-import StartWindow.ListasEnlazadas.*;
+//import java.io.ObjectOutputStream.PutField;
+//import StartWindow.ListasEnlazadas.*;
 import StartWindow.Reproductor.*;
-import java.io.IOException;
+
 
 public class Main extends JFrame implements ActionListener {
 
     Reproducir_Musica Reproductor= new Reproducir_Musica();
 
-    String Nombre_Canción = "";
-    
+    String Nombre_Canción, ruta;
+  
     JButton Playbtn, Pausebtn, Continuebtn, Stopbtn, AgregarBtn, Play2btn, Statusbtn;
     public Main(){
         Playbtn= new JButton("Play");
@@ -109,7 +111,7 @@ public class Main extends JFrame implements ActionListener {
         JFileChooser Escoger_Canción = new JFileChooser();
         Escoger_Canción.showOpenDialog(Escoger_Canción);
         try {
-            String ruta = Escoger_Canción.getSelectedFile().getAbsolutePath();                                        
+            ruta = Escoger_Canción.getSelectedFile().getAbsolutePath();                                        
             File archivo = new File(ruta);
             Nombre_Canción= archivo.getName();
             entrada = new Scanner(archivo);
@@ -127,21 +129,40 @@ public class Main extends JFrame implements ActionListener {
                 entrada.close();
             }
         }
-        CSVWriter csvWriter;
 
-        try {
-        csvWriter = new CSVWriter(new FileWriter("SampleProject4Git/src/StartWindow/Usuarios/Usuarios.csv", true));
-        String [] Escribir  = new String[1];
-            Escribir[0]= Nombre_Canción;
+        if (entrada!=null){
+            CSVWriter csvWriter;
+            BufferedReader archivocsv;
+            try {
+                
+                archivocsv = new BufferedReader(new FileReader("SampleProject4Git/src/StartWindow/Usuarios/Usuarios.csv"));
+                String linea= archivocsv.readLine();
+                String[] datos= linea.split(",", -1);
+                csvWriter = new CSVWriter(new FileWriter("SampleProject4Git/src/StartWindow/Usuarios/Usuarios.csv"));
+                
+                int largo_de_datos = datos.length; 
+                int num_datos = 0;
+                String[] Escribir= new String[largo_de_datos+1];
+                
         
-            csvWriter.writeNext(Escribir);
-            csvWriter.close();
-             }
-            catch(Exception ee) {
-                System.out.println("error");
-            }
-        }
+                while (num_datos < largo_de_datos) {
+                    Escribir[num_datos]= datos[num_datos].replaceAll("\"", "");
+                    num_datos++;
+                }
+                
+                Escribir[num_datos]= Nombre_Canción;
+                    System.out.println(Nombre_Canción);
 
+                    csvWriter.writeNext(Escribir);
+                    csvWriter.close();
+                    archivocsv.close();
+                    }
+                    catch(Exception ee) {
+                        System.out.println("error");
+                    }
+                    
+                }
+            }
     
 
         
