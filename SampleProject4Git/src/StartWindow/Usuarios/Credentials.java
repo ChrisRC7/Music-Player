@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class Credentials extends JFrame implements ActionListener {
     //Global variables
@@ -59,11 +60,12 @@ public class Credentials extends JFrame implements ActionListener {
             if (username.getText().equals("Chris") && (pass.getText().equals("pass"))){
                 System.out.println("Access allowed");
                 this.dispose(); //Closes current window
-                Main ReproductorVentana = new Main();
-                ReproductorVentana.setBounds(0, 0, 500, 500); //Tamaño provicional, posiblemente cambie
-                ReproductorVentana.setVisible(true);
-                ReproductorVentana.setTitle("El mp3 con la tula mas grande que hay");
-                ReproductorVentana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                try {
+                    Main.VentanaInicio();
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
                 //NewWindow mainWindow = new NewWindow();
             }else{
                 System.out.println("Access denied");

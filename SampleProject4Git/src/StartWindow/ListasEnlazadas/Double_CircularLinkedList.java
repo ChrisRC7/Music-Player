@@ -73,10 +73,49 @@ public class Double_CircularLinkedList {
         return null;
     }
 
+    public Object GetNext (Object searchValue) {
+        Node current = this.head;
+
+        while(current!=null) {
+            if (current.getData().equals(searchValue)) {
+                break;
+            } else {
+                current = current.getNext();
+            }
+        } return current.getNext().getData();
+        
+    }
+
+    public Object GetHead() {
+        
+        return this.head.getData();
+    }
+
+    public void Restart(){
+        this.head = null;
+        this.last = null;
+        this.size = 0;
+    }
+
+    public Object GetPrevious (Object searchValue) {
+        Node current = this.head;
+      
+
+        while (current!=null) {
+            if (current.getData().equals(searchValue)) {
+                break;
+            } else {
+                current = current.getNext();
+            }
+        } return current.getPrevious().getData();
+    }
+
 
     public void displayList(){
         Node current= this.head;
-        while (current!=null){
+        System.out.println(current.getData());
+        current= current.getNext();
+        while (current!=this.head){
             System.out.println(current.getData());
             current= current.getNext();
         }
