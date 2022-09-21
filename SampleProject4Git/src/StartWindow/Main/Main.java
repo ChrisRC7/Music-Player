@@ -22,6 +22,8 @@ public class Main extends JFrame implements ActionListener {
     
     String Nombre_Canción, ruta;
     private static JComboBox<String> SeleciónCanción= new JComboBox<String>();
+
+    public  static  int Reproducción;
   
     JButton Playbtn, Pausebtn, Continuebtn, Stopbtn, AgregarBtn, Anteriorbtn, Siguientebtn, Play2btn, Statusbtn;
     public Main() throws IOException{
@@ -92,6 +94,7 @@ public class Main extends JFrame implements ActionListener {
         if (btn.getSource()==Playbtn) {
             try {
                 Reproductor.Reprodución_Continua(CancionActual(), Listas_de_Canciones);
+                Reproducción= Reproductor.Status();
             } catch (Exception ex) {
                 // TODO Auto-generated catch block
                 ex.printStackTrace();
@@ -118,6 +121,7 @@ public class Main extends JFrame implements ActionListener {
 
         if (btn.getSource() == Stopbtn) {
             try {
+                Reproducción= 3;
                 Reproductor.Stop();
             } catch (Exception e) {
                 // TODO Auto-generated catch block
@@ -259,7 +263,7 @@ public class Main extends JFrame implements ActionListener {
 
 
     public static int Status() {
-        return Reproductor.Status();
+        return Reproducción;
     }
 
     public static Double_CircularLinkedList ListaActual(){

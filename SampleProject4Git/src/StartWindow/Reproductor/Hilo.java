@@ -14,14 +14,15 @@ public class Hilo extends Thread {
       
     }
 
-    public void Stop() {
-        Estado= false;
-    }
+
 
    
     public void run()  {
         Estado= true;
         while (Estado) {
+            if (Main.Status()==3) {
+            Estado= false;
+            }
             if (Main.Status()==2) {
                 try {
                     Main.PlayNext();

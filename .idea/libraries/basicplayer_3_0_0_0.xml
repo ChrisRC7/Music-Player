@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="basicplayer-3.0.0.0">
     <CLASSES>
-      <root url="jar://$USER_HOME$/Downloads/jar_files/basicplayer-3.0.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs and details/basicplayer-3.0.0.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

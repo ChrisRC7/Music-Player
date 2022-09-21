@@ -6,8 +6,9 @@ import java.io.File;
 
 import StartWindow.ListasEnlazadas.Double_CircularLinkedList;
 
-public class Reproducir_Musica extends Thread {
+public class Reproducir_Musica {
     Boolean Estado;
+    Thread hilo1;
 
     private  BasicPlayer player = new BasicPlayer();
     
@@ -20,16 +21,13 @@ public class Reproducir_Musica extends Thread {
     }
 
     public void Reprodución_Continua(String Canción, Double_CircularLinkedList Lista) throws Exception {
-        if (Status()!=0 && Status()!=1 && Status()!=2){
 
-        
+
+                Stop();
                 player.open(new File(Canción));
                 Play(Canción);
-                Thread hilo1 = new Hilo("Canciones", Lista);
+                hilo1 = new Hilo("Canciones", Lista);
                 hilo1.start();
-        }else {
-            
-        }
         
     }
 
@@ -60,7 +58,7 @@ public class Reproducir_Musica extends Thread {
         player.stop();
     }
 
-    
-    
+
+
 
 }
