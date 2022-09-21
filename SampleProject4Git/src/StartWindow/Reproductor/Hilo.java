@@ -21,12 +21,11 @@ public class Hilo extends Thread {
    
     public void run()  {
         Estado= true;
-        int i=0;
         while (Estado) {
             if (Main.Status()==2) {
                 try {
                     Main.PlayNext();
-                    Main.Cambiar();
+                    System.out.println("Cambio Auto");
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();

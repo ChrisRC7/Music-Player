@@ -26,6 +26,7 @@ public class Main extends JFrame implements ActionListener {
     JButton Playbtn, Pausebtn, Continuebtn, Stopbtn, AgregarBtn, Anteriorbtn, Siguientebtn, Play2btn, Statusbtn;
     public Main() throws IOException{
         setLayout(null);
+        
         Playbtn= new JButton("<html>Play<html>");
         Playbtn.setBounds(155, 100, 60, 50);
         add(Playbtn);
@@ -210,7 +211,7 @@ public class Main extends JFrame implements ActionListener {
 
         if (btn.getSource() == Anteriorbtn) {
             String Canción= (String) Listas_de_Canciones.GetPrevious(CancionActual());
-            SeleciónCanción.setSelectedItem(Canción);
+            Cambiar(Canción);
             
             try {
                 Reproductor.Play(Canción);
@@ -224,7 +225,7 @@ public class Main extends JFrame implements ActionListener {
 
         if (btn.getSource() == Siguientebtn) {
             String Canción= (String) Listas_de_Canciones.GetNext(CancionActual());
-            SeleciónCanción.setSelectedItem(Canción);
+            Cambiar(Canción);
             
             try {
                 Reproductor.Play(Canción);
@@ -252,9 +253,7 @@ public class Main extends JFrame implements ActionListener {
     }
     public static void PlayNext() throws Exception {
         String Canción= (String) Listas_de_Canciones.GetNext(CancionActual());
-        System.out.println(CancionActual());
-        System.out.println(Canción);
-
+        Cambiar(Canción);
         Reproductor.Play(Canción);
     }
 
@@ -272,8 +271,7 @@ public class Main extends JFrame implements ActionListener {
         return (String) SeleciónCanción.getSelectedItem();
     }
 
-    public static void Cambiar() {
-        String Canción= (String) Listas_de_Canciones.GetNext(CancionActual());
+    public static void Cambiar(String Canción) {
         SeleciónCanción.setSelectedItem(Canción);
     }
     
