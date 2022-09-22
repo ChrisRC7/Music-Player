@@ -14,5 +14,8 @@
     <orderEntry type="library" name="slf4j-api-1.7.12" level="project" />
     <orderEntry type="library" name="tritonus-share-0.3.7.4" level="project" />
     <orderEntry type="library" name="opencsv-5.7.0" level="project" />
+    <orderEntry type="library" name="PanamaHitek_Arduino.v2.7.0" level="project" />
+    <orderEntry type="library" name="ComunicacionSerial-2.1" level="project" />
+    <orderEntry type="library" name="jssc" level="project" />
   </component>
 </module>

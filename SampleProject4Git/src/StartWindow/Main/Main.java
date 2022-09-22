@@ -2,24 +2,32 @@ package StartWindow.Main;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import StartWindow.Usuarios.Credentials;
 import com.opencsv.*;
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import java.awt.event.*;
-import StartWindow.ListasEnlazadas.Double_CircularLinkedList;
+
+//import java.io.ObjectOutputStream.PutField;
 //import StartWindow.ListasEnlazadas.*;
+//import panamahitek.Arduino.PanamaHitek_Arduino;
+
+import StartWindow.ListasEnlazadas.Double_CircularLinkedList;
 import StartWindow.Reproductor.*;
 
+import comunicacionserial.ArduinoExcepcion;
+import comunicacionserial.ComunicacionSerial_Arduino;
 
 public class Main extends JFrame implements ActionListener {
+
+    ComunicacionSerial_Arduino conexion = new ComunicacionSerial_Arduino();
     static Double_CircularLinkedList Listas_de_Canciones= new Double_CircularLinkedList();
     static Reproducir_Musica Reproductor= new Reproducir_Musica();
     
@@ -30,58 +38,81 @@ public class Main extends JFrame implements ActionListener {
 
     public  static  int Reproducción;
   
-    JButton Playbtn, Pausebtn, Continuebtn, Stopbtn, AgregarBtn, Anteriorbtn, Siguientebtn, Play2btn, Statusbtn;
+    JButton Playbtn, Pausebtn, Continuebtn, Stopbtn, AgregarCanciónBtn, EliminarCanciónBtn, 
+    AgregarBibliotecaBtn, EliminarBibliotecaBtn, Anteriorbtn, Siguientebtn, Favorita, Statusbtn;
+
     public Main() throws IOException{
-        //setLayout(null);
-        
+
+        /*try {
+            conexion.arduinoTX("COM3",9600);
+        } catch (ArduinoExcepcion e) {
+             throw new RuntimeException(e);
+        }*/
+
+        setLayout(null);
+
+        Favorita= new JButton("Fav");
+        Favorita.setBounds(120, 85, 70, 50);
+        add(Favorita);
+        Favorita.addActionListener(this);
+
+        AgregarBibliotecaBtn= new JButton("Agregar Biblioteca");
+        AgregarBibliotecaBtn.setBounds(340, 20, 150 ,50);
+        add(AgregarBibliotecaBtn);
+        AgregarBibliotecaBtn.addActionListener(this);
+
+        EliminarBibliotecaBtn= new JButton("Eliminar Biblioteca");
+        EliminarBibliotecaBtn.setBounds(340, 85, 150, 50);
+        add(EliminarBibliotecaBtn);
+        EliminarBibliotecaBtn.addActionListener(this);
+
+        AgregarCanciónBtn= new JButton("Agregar Canción");
+        AgregarCanciónBtn.setBounds(520, 20, 150, 50);
+        add(AgregarCanciónBtn);
+        AgregarCanciónBtn.addActionListener(this);
+
+        EliminarCanciónBtn= new JButton("Eliminar Canción");
+        EliminarCanciónBtn.setBounds(520, 85, 150, 50);
+        add(EliminarCanciónBtn);
+        EliminarCanciónBtn.addActionListener(this);
+
+        Stopbtn= new JButton("<html>Stop<html>");
+        Stopbtn.setBounds(20, 160, 60, 50);
+        add(Stopbtn);
+        Stopbtn.addActionListener(this);
+
+        Anteriorbtn= new JButton("<html>Previous Music<html>");
+        Anteriorbtn.setBounds(80, 160, 75, 50);
+        add(Anteriorbtn);
+        Anteriorbtn.addActionListener(this);
+
         Playbtn= new JButton("<html>Play<html>");
-        Playbtn.setBounds(155, 100, 60, 50);
+        Playbtn.setBounds(155, 160, 60, 50);
         add(Playbtn);
         Playbtn.addActionListener(this);
 
         Pausebtn= new JButton("<html>Pause<html>");
-        Pausebtn.setBounds(215, 100, 65, 50);
+        Pausebtn.setBounds(215, 160, 65, 50);
         add(Pausebtn);
         Pausebtn.addActionListener(this);
 
         Continuebtn= new JButton("<html>Resume<html>");
-        Continuebtn.setBounds(280, 100, 80, 50);
+        Continuebtn.setBounds(280, 160, 80, 50);
         add(Continuebtn);
         Continuebtn.addActionListener(this);
 
-        Stopbtn= new JButton("<html>Stop<html>");
-        Stopbtn.setBounds(20, 100, 60, 50);
-        add(Stopbtn);
-        Stopbtn.addActionListener(this);
-
-        AgregarBtn= new JButton("Agregar Canción");
-        AgregarBtn.setBounds(310, 20, 150, 50);
-        add(AgregarBtn);
-        AgregarBtn.addActionListener(this);
-
         Siguientebtn= new JButton("<html>Next Music<html>");
-        Siguientebtn.setBounds(360, 100, 75, 50);
+        Siguientebtn.setBounds(360, 160, 75, 50);
         add(Siguientebtn);
         Siguientebtn.addActionListener(this);
 
-        Anteriorbtn= new JButton("<html>Previous Music<html>");
-        Anteriorbtn.setBounds(80, 100, 75, 50);
-        add(Anteriorbtn);
-        Anteriorbtn.addActionListener(this);
-
         Statusbtn= new JButton("Status");
-        Statusbtn.setBounds(200, 190, 70, 50);
+        Statusbtn.setBounds(430, 300, 75, 50);
         add(Statusbtn);
         Statusbtn.addActionListener(this);
-        
-        Play2btn= new JButton("Play2");
-        Play2btn.setBounds(100, 300, 70, 50);
-        add(Play2btn);
-        Play2btn.addActionListener(this);
 
         JPanel ContenedorVolume= new JPanel();
-        
-        ContenedorVolume.setBounds(10, 150, 450, 90);
+        ContenedorVolume.setBounds(10, 210, 450, 90);
         ContenedorVolume.add(Volume);
         add(ContenedorVolume);
 
@@ -104,57 +135,89 @@ public class Main extends JFrame implements ActionListener {
         Canciona_Selecionada.setVerticalAlignment(JLabel.BOTTOM);
         Canciona_Selecionada.setHorizontalAlignment(JLabel.CENTER);
         add(Canciona_Selecionada);
-
-        CancionesDisponibles();
         
         JLabel TextBiblioteca = new JLabel("<html>Seleciona la biblioteca<html>");
-        //TextBiblioteca.setVerticalAlignment(JLabel.TOP);
-        //TextBiblioteca.setHorizontalAlignment(JLabel.CENTER);
-        //TextBiblioteca.setBounds(40, 40, 300, 300);
-        //JPanel Textos= new JPanel(new BorderLayout(5, 20));
-        //Textos.setBorder(new EmptyBorder(20, 20, 20, 20));
-
-        JPanel ContenedorTextoBiblioteca= new JPanel();
-        //Textos.add(ContenedorTextoBiblioteca, BorderLayout.PAGE_START);
-        ContenedorTextoBiblioteca.add(TextBiblioteca);
-        ContenedorTextoBiblioteca.setBounds(30, 35, 100, 200);
         TextBiblioteca.setVisible(true);
 
-        add(ContenedorTextoBiblioteca);
+        JPanel ContenedorTextBiblioteca= new JPanel();
+        ContenedorTextBiblioteca.add(TextBiblioteca);
+        ContenedorTextBiblioteca.setBounds(10, 15, 135, 20);
+        add(ContenedorTextBiblioteca);
         
-
-        JPanel ContenedorSelecciónBibliotecas= new JPanel();
-        ContenedorSelecciónBibliotecas.setBounds(30, 35, 100, 200);
+        SeleciónBiblioteca.addActionListener(this);
+        JPanel ContenedorSelecciónBibliotecas = new JPanel();
+        ContenedorSelecciónBibliotecas.setBounds(30, 35, 105, 200);
         ContenedorSelecciónBibliotecas.add(SeleciónBiblioteca);
         add(ContenedorSelecciónBibliotecas);
 
 
-        //JLabel Label2= new JLabel("<html>Selecciona la canción<html>");
-        //Label2.setBounds(0,0 ,100 ,100);
+        JLabel TextCanciones= new JLabel("<html>Selecciona la canción<html>");
+        TextCanciones.setVisible(true);
 
-        //SeleciónCanción.setBounds(10,45,80,20);
-
-        JPanel ContenedorSelecciónCanción= new JPanel();
-        ContenedorSelecciónCanción.setBounds(210, 35, 100, 200);
+        JPanel ContenedorTextCanciones = new JPanel();
+        ContenedorTextCanciones.setBounds(170, 15, 135, 20);
+        ContenedorTextCanciones.add(TextCanciones);
+        add(ContenedorTextCanciones);
+        
+        JPanel ContenedorSelecciónCanción = new JPanel();
+        ContenedorSelecciónCanción.setBounds(190, 35, 105, 200);
         ContenedorSelecciónCanción.add(SeleciónCanción);
         add(ContenedorSelecciónCanción);
+
+        BibliotecasDisponibles();
+        //CancionesDisponibles();
+        
+        
         //add(SeleciónCanción);
         //SeleciónCanción.addActionListener(this);
 
         
-        //SeleciónBiblioteca.addActionListener(this);
-
-        pack();
-        setVisible(true);
+        
     }
  
     @Override
     public void actionPerformed(ActionEvent btn) {
 
-        if (btn.getSource()==Playbtn) {
+        if (btn.getSource() == AgregarBibliotecaBtn) {
+            CSVWriter csvWriter;
+            BufferedReader archivocsv;
+
+            try {
+                archivocsv = new BufferedReader(new FileReader("SampleProject4Git/src/StartWindow/Usuarios/Usuarios.csv"));
+                int NumDeLinea = -2;
+                String linea;
+                while ((linea= archivocsv.readLine()) != null) {
+                    NumDeLinea++;
+                 }
+                String [] NuevaLinea= new String[1];
+                NuevaLinea[0] = "Biblioteca "+NumDeLinea;
+                csvWriter = new CSVWriter(new FileWriter("SampleProject4Git/src/StartWindow/Usuarios/Usuarios.csv", true));
+                csvWriter.writeNext(NuevaLinea);
+                csvWriter.close();
+                archivocsv.close();
+
+                BibliotecasDisponibles();
+         }
+         catch(Exception ee) {
+            BibliotecasDisponibles();
+        }
+        }
+
+        if (btn.getSource() == SeleciónBiblioteca) {
+            try {
+                CancionesDisponibles();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+        if (btn.getSource() == Playbtn) {
             try {
                 Reproductor.Reprodución_Continua(CancionActual(), Listas_de_Canciones);
                 Reproducción= Reproductor.Status();
+                conexion.sendData("1");
+
             } catch (Exception ex) {
                 // TODO Auto-generated catch block
                 ex.printStackTrace();
@@ -164,6 +227,7 @@ public class Main extends JFrame implements ActionListener {
         if (btn.getSource() == Pausebtn) {
             try {
                 Reproductor.Pausa();
+                conexion.sendData("2");
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -189,89 +253,94 @@ public class Main extends JFrame implements ActionListener {
             }
         }
 
-        if (btn.getSource() == AgregarBtn) {
+        if (btn.getSource() == AgregarCanciónBtn) {
             
             Scanner entrada = null;
-        JFileChooser Escoger_Canción = new JFileChooser();
-        Escoger_Canción.showOpenDialog(Escoger_Canción);
-        try {
-            ruta = Escoger_Canción.getSelectedFile().getAbsolutePath();                                        
-            File archivo = new File(ruta);
-            Nombre_Canción= archivo.getName();
-            entrada = new Scanner(archivo);
-            while (entrada.hasNext()) {
-                System.out.println(entrada.nextLine());
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
-        } catch (NullPointerException e) {
-            System.out.println("No se ha seleccionado ningún fichero");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        } finally {
-            if (entrada != null) {
-                entrada.close();
-            }
-        }
-
-        if (entrada!=null){
-            CSVWriter csvWriter;
-            BufferedReader archivocsv;
+            JFileChooser Escoger_Canción = new JFileChooser();
+            Escoger_Canción.showOpenDialog(Escoger_Canción);
             try {
-                
-                archivocsv = new BufferedReader(new FileReader("SampleProject4Git/src/StartWindow/Usuarios/Usuarios.csv"));
-                String linea= archivocsv.readLine();
-                String[] datos= linea.split(",", -1);
-                int largo_de_datos = datos.length; 
-                int num_datos = 0;
-                String[] Escribir= new String[largo_de_datos];
-                csvWriter = new CSVWriter(new FileWriter("SampleProject4Git/src/StartWindow/Usuarios/Usuarios.csv"));
-
-                while (num_datos < largo_de_datos) {
-                    Escribir[num_datos]= datos[num_datos].replaceAll("\"", "");
-                    num_datos++;
-                }
-                csvWriter.writeNext(Escribir);
-                linea= archivocsv.readLine();
-                if(linea!=null) {
-                    datos= linea.split(",", -1);
-                    largo_de_datos = datos.length;
-                    num_datos = 0; 
-                } else {
-                    largo_de_datos=0;
-                }
-                
-                Escribir= new String[largo_de_datos+1];
-                if (largo_de_datos!= 0) {
-                        while (num_datos < largo_de_datos) {
-                            Escribir[num_datos]= datos[num_datos].replaceAll("\"", "");
-                            num_datos++;
-                     
-                        }
-                        Escribir[num_datos]= Nombre_Canción;
-                        
-                }else {
-                    Escribir[largo_de_datos]= Nombre_Canción;
-                }
-        
-                csvWriter.writeNext(Escribir);
-                
-                    csvWriter.close();
-                    archivocsv.close();
-                    }
-                    catch(Exception ee) {
-                        System.out.println("error");
-                    }
-
-                try {
-                    CancionesDisponibles();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                    
+                ruta = Escoger_Canción.getSelectedFile().getAbsolutePath();                                        
+                File archivo = new File(ruta);
+                Nombre_Canción= archivo.getName();
+                entrada = new Scanner(archivo);
+                System.out.println("\n\n\n\n\n"+Nombre_Canción);
+                /*while (entrada.hasNext()) {
+                    System.out.println(Nombre_Canción);
+                    System.out.println(entrada.nextLine());}*/
+            } catch (FileNotFoundException e) {
+                System.out.println(e.getMessage());
+            } catch (NullPointerException e) {
+                System.out.println("No se ha seleccionado ningún fichero");
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            } finally {
+                if (entrada != null) { //el usuario escogió una canción
+                    entrada.close();
                 }
             }
+
+            if (entrada!=null){ //el usuario escogió una canción
+                CSVWriter csvWriter;
+                BufferedReader archivocsv;
+                try {
+                    
+                    archivocsv = new BufferedReader(new FileReader("SampleProject4Git/src/StartWindow/Usuarios/Usuarios.csv"));
+                    String linea= archivocsv.readLine();
+                    System.out.println(linea); //info del usuario
+                    String[] datos= linea.split(",", -1);
+                    int largo_de_datos = datos.length;
+                    //System.out.println("largo datos:"+datos.length);
+                    int num_datos = 0;
+                    String[] Escribir= new String[largo_de_datos];
+                    csvWriter = new CSVWriter(new FileWriter("SampleProject4Git/src/StartWindow/Usuarios/Usuarios.csv"));
+
+                    while (num_datos < largo_de_datos) {
+                        Escribir[num_datos]= datos[num_datos].replaceAll("\"", "");
+                        num_datos++;
+                    }
+                    csvWriter.writeNext(Escribir);
+                    linea= archivocsv.readLine();
+                    if(linea!=null) {
+                        datos= linea.split(",", -1);
+                        largo_de_datos = datos.length;
+                        num_datos = 0; 
+                    } else {
+                        largo_de_datos=0;
+                    }
+                    
+                    Escribir= new String[largo_de_datos+1];
+                    if (largo_de_datos!= 0) {
+                            while (num_datos < largo_de_datos) {
+                                Escribir[num_datos]= datos[num_datos].replaceAll("\"", "");
+                                num_datos++;
+                        
+                            }
+                            Escribir[num_datos]= Nombre_Canción;
+                            System.out.println("CE MP3 PLAYER");
+                            
+                    }else {
+                        Escribir[largo_de_datos]= Nombre_Canción;
+
+                    }
+            
+                    csvWriter.writeNext(Escribir);
+                    
+                        csvWriter.close();
+                        archivocsv.close();
+                        }
+                        catch(Exception ee) {
+                            System.out.println("error");
+                        }
+
+                    try {
+                        CancionesDisponibles();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                        
+                    }
+                }
 
         if (btn.getSource() == Anteriorbtn) {
             String Canción= (String) Listas_de_Canciones.GetPrevious(CancionActual());
@@ -300,15 +369,6 @@ public class Main extends JFrame implements ActionListener {
                 e1.printStackTrace();
             }
            
-        }
-
-        if (btn.getSource() == Play2btn) {
-            try {
-                Reproductor.Play2();
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
         }
 
         if (btn.getSource()== Statusbtn) {
@@ -343,19 +403,49 @@ public class Main extends JFrame implements ActionListener {
     public static void Cambiar(String Canción) {
         SeleciónCanción.setSelectedItem(Canción);
     }
-    
+
+    public void BibliotecasDisponibles() {
+        BufferedReader archivocsv;
+        try {
+            SeleciónBiblioteca.removeAllItems();
+            archivocsv = new BufferedReader(new FileReader("SampleProject4Git/src/StartWindow/Usuarios/Usuarios.csv"));
+            archivocsv.readLine();
+            archivocsv.readLine();
+            int i = 0;
+            String linea;
+            while ((linea= archivocsv.readLine()) != null) {
+                String lista[] = linea.split(",", -1);
+                SeleciónBiblioteca.addItem(lista[0].replaceAll("\"", ""));
+                i++;
+            }
+            archivocsv.close();
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }catch (IOException ex) {
+            System.out.println("Error");
+        }
+    }
 
     public void CancionesDisponibles() throws IOException {
         BufferedReader archivocsv;
-        String linea[];
         archivocsv = new BufferedReader(new FileReader("SampleProject4Git/src/StartWindow/Usuarios/Usuarios.csv"));
         archivocsv.readLine();
+        archivocsv.readLine();
+        String linea[];
+        String Biblioteca;
+        while(true) {
+            linea= archivocsv.readLine().split(",", -1);
+            Biblioteca = linea[0].replaceAll("\"", "");
+            if (Biblioteca.equals(SeleciónBiblioteca.getSelectedItem())) {
+                break;
+            }
+        }
         SeleciónCanción.removeAllItems();
-        linea= archivocsv.readLine().split(",", -1);
-        String lista;
-        int i = 0;
         Listas_de_Canciones.Restart();
-        while(i< linea.length) {
+        String lista;
+        int i = 1;
+        while(i< (linea.length-1)) {
             lista = linea[i].replaceAll("\"", "");
             Listas_de_Canciones.insertLast(lista);
             SeleciónCanción.addItem(lista);
@@ -367,7 +457,7 @@ public class Main extends JFrame implements ActionListener {
 
     public static void VentanaInicio() throws IOException {
         Main ReproductorVentana = new Main();
-                ReproductorVentana.setBounds(0, 0, 500, 500); //Tamaño provicional, posiblemente cambie
+                ReproductorVentana.setBounds(0, 0, 750, 500); //Tamaño provicional, posiblemente cambie
                 ReproductorVentana.setVisible(true);
                 ReproductorVentana.setTitle("El mp3 con la tula mas grande que hay");
                 ReproductorVentana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

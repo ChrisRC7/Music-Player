@@ -22,7 +22,6 @@ public class Reproducir_Musica {
 
     public void Reprodución_Continua(String Canción, Double_CircularLinkedList Lista) throws Exception {
 
-
                 Stop();
                 player.open(new File(Canción));
                 Play(Canción);
@@ -31,11 +30,11 @@ public class Reproducir_Musica {
         
     }
 
-    public void Play2() throws Exception{
+    /*public void Play2() throws Exception{
         player.open(new File("test.mp3"));
         player.play();
-        
-    }
+
+    }*/
 
     public int Status(){
         return player.getStatus();
