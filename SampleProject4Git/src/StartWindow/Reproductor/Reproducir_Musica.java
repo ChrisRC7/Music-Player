@@ -38,7 +38,6 @@ public class Reproducir_Musica {
     }
 
     public int Status(){
- 
         return player.getStatus();
     }
 
@@ -52,6 +51,10 @@ public class Reproducir_Musica {
 
     public void Continuar() throws Exception{
         player.resume();
+    }
+
+    public void ChangeVolume(Double Volume) throws Exception {
+        player.setGain(Volume);
     }
 
     public void Stop() throws Exception{

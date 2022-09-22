@@ -3,15 +3,18 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import com.opencsv.*;
-
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import java.awt.event.*;
 import StartWindow.ListasEnlazadas.Double_CircularLinkedList;
-//import java.io.ObjectOutputStream.PutField;
 //import StartWindow.ListasEnlazadas.*;
 import StartWindow.Reproductor.*;
 
@@ -21,13 +24,15 @@ public class Main extends JFrame implements ActionListener {
     static Reproducir_Musica Reproductor= new Reproducir_Musica();
     
     String Nombre_Canción, ruta;
-    private static JComboBox<String> SeleciónCanción= new JComboBox<String>();
+    static JSlider Volume= new JSlider(JSlider.HORIZONTAL, 0, 100, 50 );
+    private static JComboBox<String> SeleciónCanción = new JComboBox<String>();
+    private static JComboBox<String> SeleciónBiblioteca = new JComboBox<String>();
 
     public  static  int Reproducción;
   
     JButton Playbtn, Pausebtn, Continuebtn, Stopbtn, AgregarBtn, Anteriorbtn, Siguientebtn, Play2btn, Statusbtn;
     public Main() throws IOException{
-        setLayout(null);
+        //setLayout(null);
         
         Playbtn= new JButton("<html>Play<html>");
         Playbtn.setBounds(155, 100, 60, 50);
@@ -50,7 +55,7 @@ public class Main extends JFrame implements ActionListener {
         Stopbtn.addActionListener(this);
 
         AgregarBtn= new JButton("Agregar Canción");
-        AgregarBtn.setBounds(120, 20, 150, 50);
+        AgregarBtn.setBounds(310, 20, 150, 50);
         add(AgregarBtn);
         AgregarBtn.addActionListener(this);
 
@@ -74,20 +79,75 @@ public class Main extends JFrame implements ActionListener {
         add(Play2btn);
         Play2btn.addActionListener(this);
 
+        JPanel ContenedorVolume= new JPanel();
+        
+        ContenedorVolume.setBounds(10, 150, 450, 90);
+        ContenedorVolume.add(Volume);
+        add(ContenedorVolume);
+
+        Volume.addChangeListener(new ChangeListener() {
+
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                Double Dicibelios= (double) (0.00+ (Volume.getValue()/100.00));
+                try {
+                    Reproductor.ChangeVolume(Dicibelios);
+                } catch (Exception e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+            }
+            
+        });;
+
         JLabel Canciona_Selecionada = new JLabel("Sin selecionar");
-        Canciona_Selecionada.setVerticalAlignment(JLabel.TOP);
+        Canciona_Selecionada.setVerticalAlignment(JLabel.BOTTOM);
         Canciona_Selecionada.setHorizontalAlignment(JLabel.CENTER);
         add(Canciona_Selecionada);
 
         CancionesDisponibles();
-   
+        
+        JLabel TextBiblioteca = new JLabel("<html>Seleciona la biblioteca<html>");
+        //TextBiblioteca.setVerticalAlignment(JLabel.TOP);
+        //TextBiblioteca.setHorizontalAlignment(JLabel.CENTER);
+        //TextBiblioteca.setBounds(40, 40, 300, 300);
+        //JPanel Textos= new JPanel(new BorderLayout(5, 20));
+        //Textos.setBorder(new EmptyBorder(20, 20, 20, 20));
+
+        JPanel ContenedorTextoBiblioteca= new JPanel();
+        //Textos.add(ContenedorTextoBiblioteca, BorderLayout.PAGE_START);
+        ContenedorTextoBiblioteca.add(TextBiblioteca);
+        ContenedorTextoBiblioteca.setBounds(30, 35, 100, 200);
+        TextBiblioteca.setVisible(true);
+
+        add(ContenedorTextoBiblioteca);
+        
+
+        JPanel ContenedorSelecciónBibliotecas= new JPanel();
+        ContenedorSelecciónBibliotecas.setBounds(30, 35, 100, 200);
+        ContenedorSelecciónBibliotecas.add(SeleciónBiblioteca);
+        add(ContenedorSelecciónBibliotecas);
+
+
         //JLabel Label2= new JLabel("<html>Selecciona la canción<html>");
         //Label2.setBounds(0,0 ,100 ,100);
-        SeleciónCanción.setBounds(10,10,80,20);
-        add(SeleciónCanción);
-        SeleciónCanción.addActionListener(this);
-    }
 
+        //SeleciónCanción.setBounds(10,45,80,20);
+
+        JPanel ContenedorSelecciónCanción= new JPanel();
+        ContenedorSelecciónCanción.setBounds(210, 35, 100, 200);
+        ContenedorSelecciónCanción.add(SeleciónCanción);
+        add(ContenedorSelecciónCanción);
+        //add(SeleciónCanción);
+        //SeleciónCanción.addActionListener(this);
+
+        
+        //SeleciónBiblioteca.addActionListener(this);
+
+        pack();
+        setVisible(true);
+    }
+ 
     @Override
     public void actionPerformed(ActionEvent btn) {
 
@@ -219,6 +279,7 @@ public class Main extends JFrame implements ActionListener {
             
             try {
                 Reproductor.Play(Canción);
+                Reproducción= Reproductor.Status();
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -233,14 +294,13 @@ public class Main extends JFrame implements ActionListener {
             
             try {
                 Reproductor.Play(Canción);
+                Reproducción= Reproductor.Status();
             } catch (Exception e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
            
         }
-
-        
 
         if (btn.getSource() == Play2btn) {
             try {
@@ -262,8 +322,13 @@ public class Main extends JFrame implements ActionListener {
     }
 
 
-    public static int Status() {
+    public static int StatusUsuario() {
         return Reproducción;
+    }
+
+    
+    public static int Status() {
+        return Reproductor.Status();
     }
 
     public static Double_CircularLinkedList ListaActual(){
@@ -305,7 +370,6 @@ public class Main extends JFrame implements ActionListener {
                 ReproductorVentana.setBounds(0, 0, 500, 500); //Tamaño provicional, posiblemente cambie
                 ReproductorVentana.setVisible(true);
                 ReproductorVentana.setTitle("El mp3 con la tula mas grande que hay");
-
                 ReproductorVentana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 

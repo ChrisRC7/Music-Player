@@ -5,7 +5,6 @@ import StartWindow.Main.Main;
 
 
 public class Hilo extends Thread {
-    Boolean Estado;
     Double_CircularLinkedList Canciones;
     Reproducir_Musica player ;
 
@@ -18,22 +17,32 @@ public class Hilo extends Thread {
 
    
     public void run()  {
-        Estado= true;
-        while (Estado) {
-            if (Main.Status()==3) {
-            Estado= false;
+        while (true) {
+           
+            if (Main.StatusUsuario()==3) {
+            break;
+            
             }
             if (Main.Status()==2) {
                 try {
                     Main.PlayNext();
                     System.out.println("Cambio Auto");
+                    
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
 
+            try {
+                sleep(500);
+            } catch (InterruptedException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+            
         }
+        
 
     }
     
