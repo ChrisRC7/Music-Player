@@ -2,6 +2,8 @@ package StartWindow.Main;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import StartWindow.Usuarios.Credentials;
 import com.opencsv.*;
 
 import java.io.BufferedReader;
@@ -10,13 +12,21 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import javax.swing.*;
 import java.awt.event.*;
-import StartWindow.ListasEnlazadas.Double_CircularLinkedList;
+import java.util.logging.Logger;
+
 //import java.io.ObjectOutputStream.PutField;
 //import StartWindow.ListasEnlazadas.*;
+//import panamahitek.Arduino.PanamaHitek_Arduino;
+
+import StartWindow.ListasEnlazadas.Double_CircularLinkedList;
 import StartWindow.Reproductor.*;
 
+import comunicacionserial.ArduinoExcepcion;
+import comunicacionserial.ComunicacionSerial_Arduino;
 
 public class Main extends JFrame implements ActionListener {
+
+    ComunicacionSerial_Arduino conexion = new ComunicacionSerial_Arduino();
     static Double_CircularLinkedList Listas_de_Canciones= new Double_CircularLinkedList();
     static Reproducir_Musica Reproductor= new Reproducir_Musica();
     
@@ -27,7 +37,30 @@ public class Main extends JFrame implements ActionListener {
   
     JButton Playbtn, Pausebtn, Continuebtn, Stopbtn, AgregarBtn, Anteriorbtn, Siguientebtn, Play2btn, Statusbtn;
     public Main() throws IOException{
+
+        /*try {
+            conexion.arduinoTX("COM3",9600);
+        } catch (ArduinoExcepcion e) {
+             throw new RuntimeException(e);
+        }*/
+
         setLayout(null);
+
+        AgregarBtn= new JButton("Agregar Canción");
+        AgregarBtn.setBounds(120, 20, 150, 50);
+        add(AgregarBtn);
+        AgregarBtn.addActionListener(this);
+
+        Stopbtn= new JButton("<html>Stop<html>");
+        Stopbtn.setBounds(20, 100, 60, 50);
+        add(Stopbtn);
+        Stopbtn.addActionListener(this);
+
+        Anteriorbtn= new JButton("<html>Previous Music<html>");
+        Anteriorbtn.setBounds(80, 100, 75, 50);
+        add(Anteriorbtn);
+        Anteriorbtn.addActionListener(this);
+
         Playbtn= new JButton("<html>Play<html>");
         Playbtn.setBounds(155, 100, 60, 50);
         add(Playbtn);
@@ -43,35 +76,15 @@ public class Main extends JFrame implements ActionListener {
         add(Continuebtn);
         Continuebtn.addActionListener(this);
 
-        Stopbtn= new JButton("<html>Stop<html>");
-        Stopbtn.setBounds(20, 100, 60, 50);
-        add(Stopbtn);
-        Stopbtn.addActionListener(this);
-
-        AgregarBtn= new JButton("Agregar Canción");
-        AgregarBtn.setBounds(120, 20, 150, 50);
-        add(AgregarBtn);
-        AgregarBtn.addActionListener(this);
-
         Siguientebtn= new JButton("<html>Next Music<html>");
         Siguientebtn.setBounds(360, 100, 75, 50);
         add(Siguientebtn);
         Siguientebtn.addActionListener(this);
 
-        Anteriorbtn= new JButton("<html>Previous Music<html>");
-        Anteriorbtn.setBounds(80, 100, 75, 50);
-        add(Anteriorbtn);
-        Anteriorbtn.addActionListener(this);
-
         Statusbtn= new JButton("Status");
-        Statusbtn.setBounds(200, 190, 70, 50);
+        Statusbtn.setBounds(430, 100, 75, 50);
         add(Statusbtn);
         Statusbtn.addActionListener(this);
-        
-        Play2btn= new JButton("Play2");
-        Play2btn.setBounds(100, 300, 70, 50);
-        add(Play2btn);
-        Play2btn.addActionListener(this);
 
         JLabel Canciona_Selecionada = new JLabel("Sin selecionar");
         Canciona_Selecionada.setVerticalAlignment(JLabel.TOP);
@@ -94,6 +107,8 @@ public class Main extends JFrame implements ActionListener {
             try {
                 Reproductor.Reprodución_Continua(CancionActual(), Listas_de_Canciones);
                 Reproducción= Reproductor.Status();
+                conexion.sendData("1");
+
             } catch (Exception ex) {
                 // TODO Auto-generated catch block
                 ex.printStackTrace();
@@ -103,6 +118,7 @@ public class Main extends JFrame implements ActionListener {
         if (btn.getSource() == Pausebtn) {
             try {
                 Reproductor.Pausa();
+                conexion.sendData("2");
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -138,9 +154,10 @@ public class Main extends JFrame implements ActionListener {
             File archivo = new File(ruta);
             Nombre_Canción= archivo.getName();
             entrada = new Scanner(archivo);
-            while (entrada.hasNext()) {
-                System.out.println(entrada.nextLine());
-            }
+            System.out.println("\n\n\n\n\n"+Nombre_Canción);
+            /*while (entrada.hasNext()) {
+                System.out.println(Nombre_Canción);
+                System.out.println(entrada.nextLine());}*/
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
         } catch (NullPointerException e) {
@@ -148,20 +165,22 @@ public class Main extends JFrame implements ActionListener {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         } finally {
-            if (entrada != null) {
+            if (entrada != null) { //el usuario escogió una canción
                 entrada.close();
             }
         }
 
-        if (entrada!=null){
+        if (entrada!=null){ //el usuario escogió una canción
             CSVWriter csvWriter;
             BufferedReader archivocsv;
             try {
                 
                 archivocsv = new BufferedReader(new FileReader("SampleProject4Git/src/StartWindow/Usuarios/Usuarios.csv"));
                 String linea= archivocsv.readLine();
+                System.out.println(linea); //info del usuario
                 String[] datos= linea.split(",", -1);
-                int largo_de_datos = datos.length; 
+                int largo_de_datos = datos.length;
+                //System.out.println("largo datos:"+datos.length);
                 int num_datos = 0;
                 String[] Escribir= new String[largo_de_datos];
                 csvWriter = new CSVWriter(new FileWriter("SampleProject4Git/src/StartWindow/Usuarios/Usuarios.csv"));
@@ -188,9 +207,11 @@ public class Main extends JFrame implements ActionListener {
                      
                         }
                         Escribir[num_datos]= Nombre_Canción;
+                        System.out.println("CE MP3 PLAYER");
                         
                 }else {
                     Escribir[largo_de_datos]= Nombre_Canción;
+
                 }
         
                 csvWriter.writeNext(Escribir);
@@ -237,17 +258,6 @@ public class Main extends JFrame implements ActionListener {
                 e1.printStackTrace();
             }
            
-        }
-
-        
-
-        if (btn.getSource() == Play2btn) {
-            try {
-                Reproductor.Play2();
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
         }
 
         if (btn.getSource()== Statusbtn) {
@@ -304,21 +314,20 @@ public class Main extends JFrame implements ActionListener {
 
     public static void VentanaInicio() throws IOException {
         Main ReproductorVentana = new Main();
-                ReproductorVentana.setBounds(0, 0, 500, 500); //Tamaño provicional, posiblemente cambie
+                ReproductorVentana.setBounds(0, 0, 750, 500); //Tamaño provicional, posiblemente cambie
                 ReproductorVentana.setVisible(true);
                 ReproductorVentana.setTitle("El mp3 con la tula mas grande que hay");
-
                 ReproductorVentana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     //Main Method
     public static void main(String[] args){
-        try {
+        /*try {
             VentanaInicio();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }
-        //new Credentials();
+        }*/
+        new Credentials();
     }
 }
