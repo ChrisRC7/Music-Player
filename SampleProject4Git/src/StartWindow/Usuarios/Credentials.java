@@ -7,7 +7,6 @@ import javax.swing.*;
 
 //import StartWindow.NewWindow;
 
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -101,6 +100,8 @@ public class Credentials extends JFrame implements ActionListener {
                         e1.printStackTrace();
                     }
                     //NewWindow mainWindow = new NewWindow();
+                    csvSolicitud.close();
+                    csvDataBase.close();
                 }else{
                     System.out.println("Access denied");
                 }

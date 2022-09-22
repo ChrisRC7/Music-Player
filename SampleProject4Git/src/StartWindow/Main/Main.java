@@ -146,7 +146,7 @@ public class Main extends JFrame implements ActionListener {
         
         SeleciónBiblioteca.addActionListener(this);
         JPanel ContenedorSelecciónBibliotecas = new JPanel();
-        ContenedorSelecciónBibliotecas.setBounds(30, 35, 105, 200);
+        ContenedorSelecciónBibliotecas.setBounds(30, 35, 145, 200);
         ContenedorSelecciónBibliotecas.add(SeleciónBiblioteca);
         add(ContenedorSelecciónBibliotecas);
 
@@ -160,7 +160,7 @@ public class Main extends JFrame implements ActionListener {
         add(ContenedorTextCanciones);
         
         JPanel ContenedorSelecciónCanción = new JPanel();
-        ContenedorSelecciónCanción.setBounds(190, 35, 105, 200);
+        ContenedorSelecciónCanción.setBounds(190, 35, 145, 200);
         ContenedorSelecciónCanción.add(SeleciónCanción);
         add(ContenedorSelecciónCanción);
 
@@ -263,10 +263,6 @@ public class Main extends JFrame implements ActionListener {
                 File archivo = new File(ruta);
                 Nombre_Canción= archivo.getName();
                 entrada = new Scanner(archivo);
-                System.out.println("\n\n\n\n\n"+Nombre_Canción);
-                /*while (entrada.hasNext()) {
-                    System.out.println(Nombre_Canción);
-                    System.out.println(entrada.nextLine());}*/
             } catch (FileNotFoundException e) {
                 System.out.println(e.getMessage());
             } catch (NullPointerException e) {
@@ -282,51 +278,72 @@ public class Main extends JFrame implements ActionListener {
             if (entrada!=null){ //el usuario escogió una canción
                 CSVWriter csvWriter;
                 BufferedReader archivocsv;
+                String[] datos;
+                int largo_de_datos;
+                int num_datos;
+
+                String linea;
                 try {
                     
                     archivocsv = new BufferedReader(new FileReader("SampleProject4Git/src/StartWindow/Usuarios/Usuarios.csv"));
-                    String linea= archivocsv.readLine();
-                    System.out.println(linea); //info del usuario
-                    String[] datos= linea.split(",", -1);
-                    int largo_de_datos = datos.length;
-                    //System.out.println("largo datos:"+datos.length);
-                    int num_datos = 0;
-                    String[] Escribir= new String[largo_de_datos];
+                    linea= archivocsv.readLine();
                     csvWriter = new CSVWriter(new FileWriter("SampleProject4Git/src/StartWindow/Usuarios/Usuarios.csv"));
+                    datos= linea.split(",", -1);
+                    largo_de_datos= datos.length;
+                    num_datos= 0;
+                    String[] Escribir= new String[largo_de_datos];
 
-                    while (num_datos < largo_de_datos) {
+                    while(num_datos < largo_de_datos) {
                         Escribir[num_datos]= datos[num_datos].replaceAll("\"", "");
                         num_datos++;
+                        
                     }
                     csvWriter.writeNext(Escribir);
-                    linea= archivocsv.readLine();
-                    if(linea!=null) {
+
+                    while (true) {
+                        linea= archivocsv.readLine();
                         datos= linea.split(",", -1);
                         largo_de_datos = datos.length;
-                        num_datos = 0; 
-                    } else {
-                        largo_de_datos=0;
-                    }
-                    
-                    Escribir= new String[largo_de_datos+1];
-                    if (largo_de_datos!= 0) {
-                            while (num_datos < largo_de_datos) {
-                                Escribir[num_datos]= datos[num_datos].replaceAll("\"", "");
-                                num_datos++;
-                        
-                            }
-                            Escribir[num_datos]= Nombre_Canción;
-                            System.out.println("CE MP3 PLAYER");
-                            
-                    }else {
-                        Escribir[largo_de_datos]= Nombre_Canción;
+                        num_datos = 0;
+                        String[] Escribir2= new String[largo_de_datos];
+                        String Biblioteca= datos[0].replaceAll("\"", "");
 
+                        if (Biblioteca.equals(SeleciónBiblioteca.getSelectedItem())) {
+                            break;
+                        }
+
+                        while (num_datos < largo_de_datos) {
+                            Escribir2[num_datos]= datos[num_datos].replaceAll("\"", "");
+                            num_datos++;
+                        }                        
+                        csvWriter.writeNext(Escribir2);
                     }
-            
-                    csvWriter.writeNext(Escribir);
                     
-                        csvWriter.close();
-                        archivocsv.close();
+                    String [] Escribir3= new String[largo_de_datos+1];
+                    
+                    while (num_datos < largo_de_datos) {
+                        Escribir3[num_datos]= datos[num_datos].replaceAll("\"", "");
+                            num_datos++;
+                        
+                        }
+                    Escribir3[num_datos]= Nombre_Canción;            
+                    csvWriter.writeNext(Escribir3);
+
+                    while((linea= archivocsv.readLine()) != null ){
+                        datos= linea.split(",", -1);
+                        largo_de_datos = datos.length;
+                        num_datos = 0;
+                        String[] Escribir4= new String[largo_de_datos];
+
+                        while (num_datos < largo_de_datos) {
+                            Escribir4[num_datos]= datos[num_datos].replaceAll("\"", "");
+                            num_datos++;
+                        }                        
+                        csvWriter.writeNext(Escribir4);
+                    }
+                
+                    csvWriter.close();
+                    archivocsv.close();
                         }
                         catch(Exception ee) {
                             System.out.println("error");
@@ -375,6 +392,7 @@ public class Main extends JFrame implements ActionListener {
             Reproductor.Status();
         }
     }
+
     public static void PlayNext() throws Exception {
         String Canción= (String) Listas_de_Canciones.GetNext(CancionActual());
         Cambiar(Canción);
@@ -411,12 +429,10 @@ public class Main extends JFrame implements ActionListener {
             archivocsv = new BufferedReader(new FileReader("SampleProject4Git/src/StartWindow/Usuarios/Usuarios.csv"));
             archivocsv.readLine();
             archivocsv.readLine();
-            int i = 0;
             String linea;
             while ((linea= archivocsv.readLine()) != null) {
                 String lista[] = linea.split(",", -1);
                 SeleciónBiblioteca.addItem(lista[0].replaceAll("\"", ""));
-                i++;
             }
             archivocsv.close();
         } catch (FileNotFoundException e) {
@@ -441,11 +457,12 @@ public class Main extends JFrame implements ActionListener {
                 break;
             }
         }
+        System.out.println("siguiente while");
         SeleciónCanción.removeAllItems();
         Listas_de_Canciones.Restart();
         String lista;
         int i = 1;
-        while(i< (linea.length-1)) {
+        while(i <= (linea.length-1)) {
             lista = linea[i].replaceAll("\"", "");
             Listas_de_Canciones.insertLast(lista);
             SeleciónCanción.addItem(lista);
