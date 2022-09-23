@@ -50,28 +50,27 @@ public class Double_CircularLinkedList {
         this.size++;
     }
 
-    public Node delete (Object searchValue){
+    public void Delete (Object searchValue){
         Node current = this.head;
         Node previous = this.head;
 
-        while(current!=null){
-            if (current.getData().equals(searchValue)){
-                if (current==this.head) {
-                    this.head.getNext().setPrevious(this.head.getPrevious());
-                    this.head.getPrevious().setNext(this.head.getNext());
-                    this.head= this.head.getNext();
-                } else {
+        if (current==this.head) {
+            this.head.getNext().setPrevious(this.head.getPrevious());
+            this.head.getPrevious().setNext(this.head.getNext());
+            this.head= this.head.getNext();
+        } else {
+            current = current.getNext();
+            while(current!=this.head){
+                if (current.getData().equals(searchValue)){
                     previous.setNext(current.getNext());
                     current.getNext().setPrevious(previous);
+                }else{
+                    previous = current;
+                    current = current.getNext();
                 }
-                return current; 
-            }else{
-                previous = current;
-                current = current.getNext();
             }
-        }
-        return null;
-    }
+         }
+}
 
     public Object GetNext (Object searchValue) {
         Node current = this.head;

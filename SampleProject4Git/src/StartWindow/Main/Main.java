@@ -165,10 +165,6 @@ public class Main extends JFrame implements ActionListener {
         add(ContenedorSelecciónCanción);
 
         BibliotecasDisponibles();
-        //CancionesDisponibles();
-        
-        
-        //add(SeleciónCanción);
         //SeleciónCanción.addActionListener(this);
 
         
@@ -201,6 +197,60 @@ public class Main extends JFrame implements ActionListener {
          catch(Exception ee) {
             BibliotecasDisponibles();
         }
+        }
+
+        if (btn.getSource() == EliminarBibliotecaBtn) {
+            CSVWriter csvWriter;
+            BufferedReader archivocsv;
+            String[] datos;
+            int largo_de_datos;
+            int num_datos;
+            String linea;
+            try {
+                archivocsv = new BufferedReader(new FileReader("SampleProject4Git/src/StartWindow/Usuarios/Usuarios.csv"));
+                linea= archivocsv.readLine();
+                csvWriter = new CSVWriter(new FileWriter("SampleProject4Git/src/StartWindow/Usuarios/Usuarios.csv"));
+                datos= linea.split(",", -1);
+                largo_de_datos= datos.length;
+                num_datos= 0;
+                String[] Escribir= new String[largo_de_datos];
+
+                while(num_datos < largo_de_datos) {
+                    Escribir[num_datos]= datos[num_datos].replaceAll("\"", "");
+                    num_datos++;
+                        
+                }
+                csvWriter.writeNext(Escribir);
+
+                String Biblioteca_a_eliminar;
+                while((linea= archivocsv.readLine()) != null ){
+                    datos= linea.split(",", -1);
+                    Biblioteca_a_eliminar= datos[0].replaceAll("\"", "");
+
+                    if (Biblioteca_a_eliminar.equals(SeleciónBiblioteca.getSelectedItem())){
+                        linea=archivocsv.readLine();
+                        if(linea == null){
+                            break;
+                        }else {
+                            datos= linea.split(",", -1);
+                        }
+                    }
+                    largo_de_datos = datos.length;
+                    num_datos = 0;
+                    String[] Escribir2= new String[largo_de_datos];
+
+                    while (num_datos < largo_de_datos) {
+                        Escribir2[num_datos]= datos[num_datos].replaceAll("\"", "");
+                        num_datos++;
+                    }                        
+                    csvWriter.writeNext(Escribir2);
+            }
+                csvWriter.close();
+                archivocsv.close();
+                BibliotecasDisponibles();
+            }catch(Exception ee) {
+                BibliotecasDisponibles();
+            }
         }
 
         if (btn.getSource() == SeleciónBiblioteca) {
@@ -346,18 +396,99 @@ public class Main extends JFrame implements ActionListener {
                     archivocsv.close();
                         }
                         catch(Exception ee) {
-                            System.out.println("error");
+                            System.out.println("Error al agregar canción");
                         }
 
-                    try {
-                        CancionesDisponibles();
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+                    SeleciónCanción.addItem(Nombre_Canción);
+                    Listas_de_Canciones.insertLast(Nombre_Canción);
                         
                     }
                 }
+
+        if (btn.getSource() == EliminarCanciónBtn) {
+            CSVWriter csvWriter;
+            BufferedReader archivocsv;
+            String[] datos;
+            int largo_de_datos;
+            int num_datos;
+            String linea;
+            try{
+                archivocsv = new BufferedReader(new FileReader("SampleProject4Git/src/StartWindow/Usuarios/Usuarios.csv"));
+                linea= archivocsv.readLine();
+                csvWriter = new CSVWriter(new FileWriter("SampleProject4Git/src/StartWindow/Usuarios/Usuarios.csv"));
+                datos= linea.split(",", -1);
+                largo_de_datos= datos.length;
+                num_datos= 0;
+                String[] Escribir= new String[largo_de_datos];
+
+                while(num_datos < largo_de_datos) {
+                    Escribir[num_datos]= datos[num_datos].replaceAll("\"", "");
+                    num_datos++;
+                            
+                }
+                csvWriter.writeNext(Escribir);
+
+                while (true) {
+                    linea= archivocsv.readLine();
+                    datos= linea.split(",", -1);
+                    largo_de_datos = datos.length;
+                    num_datos = 0;
+                    String[] Escribir2= new String[largo_de_datos];
+                    String Biblioteca= datos[0].replaceAll("\"", "");
+
+                    if (Biblioteca.equals(SeleciónBiblioteca.getSelectedItem())) {
+                        break;
+                    }
+
+                    while (num_datos < largo_de_datos) {
+                        Escribir2[num_datos]= datos[num_datos].replaceAll("\"", "");
+                        num_datos++;
+                    }                        
+                    csvWriter.writeNext(Escribir2);
+                }
+                        
+                String [] Escribir3= new String[largo_de_datos-1];
+                
+                String valor_a_eliminar;
+                Boolean Se_elimino = false;
+
+                while (num_datos < largo_de_datos) {
+                    valor_a_eliminar= datos[num_datos].replaceAll("\"", "");
+                    if (valor_a_eliminar.equals(SeleciónCanción.getSelectedItem())) {
+                        Listas_de_Canciones.Delete(valor_a_eliminar);
+                        Se_elimino = true; 
+                    } else {
+                        if (Se_elimino){
+                            Escribir3[num_datos-1] = valor_a_eliminar;
+                        } else {
+                            Escribir3[num_datos]= valor_a_eliminar;
+                        }
+                    } 
+                    num_datos++; 
+                    
+                    }       
+                csvWriter.writeNext(Escribir3);
+
+                while((linea= archivocsv.readLine()) != null ){
+                    datos= linea.split(",", -1);
+                    largo_de_datos = datos.length;
+                    num_datos = 0;
+                    String[] Escribir4= new String[largo_de_datos];
+                    while (num_datos < largo_de_datos) {
+                            Escribir4[num_datos]= datos[num_datos].replaceAll("\"", "");
+                            num_datos++;
+                    }                        
+                    csvWriter.writeNext(Escribir4);
+                }
+            
+                csvWriter.close();
+                archivocsv.close();
+                SeleciónCanción.removeItem(SeleciónCanción.getSelectedItem());
+
+            } catch(Exception ee) {
+                System.out.println("error");
+            }
+        }
 
         if (btn.getSource() == Anteriorbtn) {
             String Canción= (String) Listas_de_Canciones.GetPrevious(CancionActual());
@@ -388,7 +519,7 @@ public class Main extends JFrame implements ActionListener {
            
         }
 
-        if (btn.getSource()== Statusbtn) {
+        if (btn.getSource() == Statusbtn) {
             Reproductor.Status();
         }
     }
@@ -435,11 +566,9 @@ public class Main extends JFrame implements ActionListener {
                 SeleciónBiblioteca.addItem(lista[0].replaceAll("\"", ""));
             }
             archivocsv.close();
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }catch (IOException ex) {
-            System.out.println("Error");
+            CancionesDisponibles();
+        } catch (IOException ex) {
+            System.out.println("Error en el JComboBox de bibliotecas");
         }
     }
 
@@ -457,7 +586,6 @@ public class Main extends JFrame implements ActionListener {
                 break;
             }
         }
-        System.out.println("siguiente while");
         SeleciónCanción.removeAllItems();
         Listas_de_Canciones.Restart();
         String lista;
