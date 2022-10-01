@@ -22,7 +22,6 @@ public class Credentials extends JFrame implements ActionListener {
 
         int varX = 17;
         int varY = 20;
-
         int varWH = 12;
 
         //Methods for the screen's interface

@@ -48,71 +48,88 @@ public class Main extends JFrame implements ActionListener {
         } catch (ArduinoExcepcion e) {
              throw new RuntimeException(e);
         }*/
+        int sizeFrame = 80;
+        int varX = sizeFrame;
+        int varY = sizeFrame*2;
+        int varWH = sizeFrame*2;
 
         setLayout(null);
 
-        Favorita= new JButton("Fav");
-        Favorita.setBounds(120, 85, 70, 50);
-        add(Favorita);
-        Favorita.addActionListener(this);
-
         AgregarBibliotecaBtn= new JButton("Agregar Biblioteca");
-        AgregarBibliotecaBtn.setBounds(340, 20, 150 ,50);
+        AgregarBibliotecaBtn.setBounds(varX*2, varY/8, varWH ,varWH/3);
         add(AgregarBibliotecaBtn);
         AgregarBibliotecaBtn.addActionListener(this);
 
+        Stopbtn= new JButton("<html>Detener Biblioteca<html>");
+        Stopbtn.setBounds(varX*2, (int) (varY/1.9), varWH, varWH/3);
+        add(Stopbtn);
+        Stopbtn.addActionListener(this);
+
         EliminarBibliotecaBtn= new JButton("Eliminar Biblioteca");
-        EliminarBibliotecaBtn.setBounds(340, 85, 150, 50);
+        EliminarBibliotecaBtn.setBounds(varX*2, (int) (varY/1.1), varWH, varWH/3);
         add(EliminarBibliotecaBtn);
         EliminarBibliotecaBtn.addActionListener(this);
 
+        JLabel TextBiblioteca = new JLabel("<html>Seleciona la biblioteca<html>");
+        TextBiblioteca.setVisible(true);
+        JPanel ContenedorTextBiblioteca= new JPanel();
+        ContenedorTextBiblioteca.add(TextBiblioteca);
+        ContenedorTextBiblioteca.setBounds(varX*2, varY, 135, 20);
+        add(ContenedorTextBiblioteca);
+
+        SeleciónBiblioteca.addActionListener(this);
+        JPanel ContenedorSelecciónBibliotecas = new JPanel();
+        ContenedorSelecciónBibliotecas.setBounds(varX*2, (int) (varY*1.5), varWH, varWH);
+        ContenedorSelecciónBibliotecas.add(SeleciónBiblioteca);
+        add(ContenedorSelecciónBibliotecas);
+
         AgregarCanciónBtn= new JButton("Agregar Canción");
-        AgregarCanciónBtn.setBounds(520, 20, 150, 50);
+        AgregarCanciónBtn.setBounds(varX*10, varY/8, varWH, varWH/3);
         add(AgregarCanciónBtn);
         AgregarCanciónBtn.addActionListener(this);
 
         EliminarCanciónBtn= new JButton("Eliminar Canción");
-        EliminarCanciónBtn.setBounds(520, 85, 150, 50);
+        EliminarCanciónBtn.setBounds(varX*10, (int) (varY/1.1), varWH, varWH/3);
         add(EliminarCanciónBtn);
         EliminarCanciónBtn.addActionListener(this);
 
-        Stopbtn= new JButton("<html>Stop<html>");
-        Stopbtn.setBounds(20, 160, 60, 50);
-        add(Stopbtn);
-        Stopbtn.addActionListener(this);
+        Favorita= new JButton("Fav");
+        Favorita.setBounds(varX*10, (int) (varY/1.9), varWH, varWH/3);
+        add(Favorita);
+        Favorita.addActionListener(this);
 
-        Anteriorbtn= new JButton("<html>Previous Music<html>");
-        Anteriorbtn.setBounds(80, 160, 75, 50);
-        add(Anteriorbtn);
-        Anteriorbtn.addActionListener(this);
+        Statusbtn= new JButton("Status");
+        Statusbtn.setBounds(varX*6, (int) (varY*1.5), varWH, varWH/3);
+        add(Statusbtn);
+        Statusbtn.addActionListener(this);
 
         Playbtn= new JButton("<html>Play<html>");
-        Playbtn.setBounds(155, 160, 60, 50);
+        Playbtn.setBounds(varX*6, varY, varWH, varWH/3);
         add(Playbtn);
         Playbtn.addActionListener(this);
 
+        Anteriorbtn= new JButton("<html>Previous Music<html>");
+        Anteriorbtn.setBounds(varX*4, (int) (varY*1.5), varWH, varWH/3);
+        add(Anteriorbtn);
+        Anteriorbtn.addActionListener(this);
+
+        Siguientebtn= new JButton("<html>Next Music<html>");
+        Siguientebtn.setBounds(varX*8, (int) (varY*1.5) , varWH, varWH/3);
+        add(Siguientebtn);
+        Siguientebtn.addActionListener(this);
+
         Pausebtn= new JButton("<html>Pause<html>");
-        Pausebtn.setBounds(215, 160, 65, 50);
+        Pausebtn.setBounds(varX*4, varY, varWH, varWH/3);
         add(Pausebtn);
         Pausebtn.addActionListener(this);
 
         Continuebtn= new JButton("<html>Resume<html>");
-        Continuebtn.setBounds(280, 160, 80, 50);
+        Continuebtn.setBounds(varX*8, varY, varWH, varWH/3);
         add(Continuebtn);
         Continuebtn.addActionListener(this);
 
-        Siguientebtn= new JButton("<html>Next Music<html>");
-        Siguientebtn.setBounds(360, 160, 75, 50);
-        add(Siguientebtn);
-        Siguientebtn.addActionListener(this);
-
-        Statusbtn= new JButton("Status");
-        Statusbtn.setBounds(430, 300, 75, 50);
-        add(Statusbtn);
-        Statusbtn.addActionListener(this);
-
         JPanel ContenedorVolume= new JPanel();
-        ContenedorVolume.setBounds(10, 210, 450, 90);
+        ContenedorVolume.setBounds((int) (varX*6.0), (int) (varY/(1.25)), 200, 90);
         ContenedorVolume.add(Volume);
         add(ContenedorVolume);
 
@@ -129,27 +146,19 @@ public class Main extends JFrame implements ActionListener {
                 }
             }
             
-        });;
+        });
 
         JLabel Canciona_Selecionada = new JLabel("Sin selecionar");
         Canciona_Selecionada.setVerticalAlignment(JLabel.BOTTOM);
         Canciona_Selecionada.setHorizontalAlignment(JLabel.CENTER);
         add(Canciona_Selecionada);
-        
-        JLabel TextBiblioteca = new JLabel("<html>Seleciona la biblioteca<html>");
-        TextBiblioteca.setVisible(true);
 
-        JPanel ContenedorTextBiblioteca= new JPanel();
-        ContenedorTextBiblioteca.add(TextBiblioteca);
-        ContenedorTextBiblioteca.setBounds(10, 15, 135, 20);
-        add(ContenedorTextBiblioteca);
-        
-        SeleciónBiblioteca.addActionListener(this);
-        JPanel ContenedorSelecciónBibliotecas = new JPanel();
-        ContenedorSelecciónBibliotecas.setBounds(30, 35, 145, 200);
-        ContenedorSelecciónBibliotecas.add(SeleciónBiblioteca);
-        add(ContenedorSelecciónBibliotecas);
+        JPanel ContenedorSelecciónCanción = new JPanel();
+        ContenedorSelecciónCanción.setBounds(varX*10, (int) (varY*1.5), varWH, varWH);
+        ContenedorSelecciónCanción.add(SeleciónCanción);
+        add(ContenedorSelecciónCanción);
 
+        BibliotecasDisponibles();
 
         JLabel TextCanciones= new JLabel("<html>Selecciona la canción<html>");
         TextCanciones.setVisible(true);
@@ -158,17 +167,8 @@ public class Main extends JFrame implements ActionListener {
         ContenedorTextCanciones.setBounds(170, 15, 135, 20);
         ContenedorTextCanciones.add(TextCanciones);
         add(ContenedorTextCanciones);
-        
-        JPanel ContenedorSelecciónCanción = new JPanel();
-        ContenedorSelecciónCanción.setBounds(190, 35, 145, 200);
-        ContenedorSelecciónCanción.add(SeleciónCanción);
-        add(ContenedorSelecciónCanción);
 
-        BibliotecasDisponibles();
         //SeleciónCanción.addActionListener(this);
-
-        
-        
     }
  
     @Override
@@ -602,9 +602,9 @@ public class Main extends JFrame implements ActionListener {
 
     public static void VentanaInicio() throws IOException {
         Main ReproductorVentana = new Main();
-                ReproductorVentana.setBounds(0, 0, 750, 500); //Tamaño provicional, posiblemente cambie
+                ReproductorVentana.setBounds(0, 0, 1250, 500); //Tamaño provicional, posiblemente cambie
                 ReproductorVentana.setVisible(true);
-                ReproductorVentana.setTitle("El mp3 con la tula mas grande que hay");
+                ReproductorVentana.setTitle("CE MUSIC PLAYER");
                 ReproductorVentana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
