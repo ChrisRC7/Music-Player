@@ -651,7 +651,6 @@ public class Main extends JFrame implements ActionListener {
             Escribir2[num_datos]= (String) SeleciónCanción.getSelectedItem();      
 
             csvWriter.writeNext(Escribir2);
-
             
              //Se continua escribirndo la demas lineas para no perderlas.
             while((linea= archivocsv.readLine()) != null ){
