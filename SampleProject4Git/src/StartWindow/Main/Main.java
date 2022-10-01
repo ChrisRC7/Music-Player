@@ -580,10 +580,18 @@ public class Main extends JFrame implements ActionListener {
         }
     }
 
+    
+    /** 
+     * @throws Exception
+     */
     public static void ContinueMusic() throws Exception {
         Reproductor.Continuar();
     }
     
+    
+    /** 
+     * @throws Exception
+     */
     public static void StopMusic() throws Exception {
         Reproducción= 3;
         Reproductor.Stop();
@@ -599,6 +607,10 @@ public class Main extends JFrame implements ActionListener {
         Reproducción= Reproductor.Status();
     }
 
+    
+    /** 
+     * @throws Exception
+     */
     public static void PlayPrevious() throws Exception {
         String Canción= (String) Listas_de_Canciones.GetPrevious(CancionActual());
         Cambiar(Canción);
@@ -742,6 +754,10 @@ public class Main extends JFrame implements ActionListener {
         }
     }
 
+    
+    /** 
+     * @return boolean
+     */
     public static boolean EsFavorita() {
         Boolean Valor= false;
         try{
