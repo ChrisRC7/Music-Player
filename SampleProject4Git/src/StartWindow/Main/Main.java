@@ -130,20 +130,10 @@ public class Main extends JFrame implements ActionListener {
         add(EliminarCanciónBtn);
         EliminarCanciónBtn.addActionListener(this);
 
-        Stopbtn= new JButton("<html>Stop<html>");
-        Stopbtn.setBounds((varX*2), (int) (varY/1.9), varWH, varWH/3);
-        add(Stopbtn);
-        Stopbtn.addActionListener(this);
-
-        Anteriorbtn= new JButton("<html>Previous Music<html>");
-        Anteriorbtn.setBounds(varX*4, (int) (varY*1.5), varWH, varWH/3);
-        add(Anteriorbtn);
-        Anteriorbtn.addActionListener(this);
-
-        Siguientebtn= new JButton("<html>Next Music<html>");
-        Siguientebtn.setBounds(varX*8, (int) (varY*1.5) , varWH, varWH/3);
-        add(Siguientebtn);
-        Siguientebtn.addActionListener(this);
+        Playbtn= new JButton("<html>Play<html>");
+        Playbtn.setBounds(varX*6, varY, varWH, varWH/3);
+        add(Playbtn);
+        Playbtn.addActionListener(this);
 
         Anteriorbtn= new JButton("<html>Previous Music<html>");
         Anteriorbtn.setBounds(varX*4, (int) (varY*1.5), varWH, varWH/3);
@@ -662,7 +652,6 @@ public class Main extends JFrame implements ActionListener {
 
             csvWriter.writeNext(Escribir2);
 
-            System.out.println("Se escribio joder");
             
              //Se continua escribirndo la demas lineas para no perderlas.
             while((linea= archivocsv.readLine()) != null ){
@@ -822,6 +811,7 @@ public class Main extends JFrame implements ActionListener {
      * @param Canción
      */
     public static void Cambiar(String Canción) {
+        Escribir = false;
         SeleciónCanción.setSelectedItem(Canción);
         if(EsFavorita()){
             FavoritaBtn.setSelected(true);
