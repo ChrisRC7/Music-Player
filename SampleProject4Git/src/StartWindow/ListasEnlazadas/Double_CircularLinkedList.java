@@ -12,14 +12,26 @@ public class Double_CircularLinkedList {
 
     }
 
+    
+    /** 
+     * @return boolean
+     */
     public boolean isEmpty(){
         return this.head == this.last && this.head== null;
     }
 
+    
+    /** 
+     * @return int
+     */
     public int size(){
         return this.size;
     }
 
+    
+    /** 
+     * @param data
+     */
     public void insertFirst(Object data){
         Node newNode= new Node(data);
 
@@ -35,6 +47,10 @@ public class Double_CircularLinkedList {
         this.size++;
     }
 
+    
+    /** 
+     * @param data
+     */
     public void insertLast(Object data){
         Node newNode= new Node(data);
 
@@ -50,6 +66,10 @@ public class Double_CircularLinkedList {
         this.size++;
     }
 
+    
+    /** 
+     * @param searchValue
+     */
     public void Delete (Object searchValue){
         Node current = this.head;
         Node previous = this.head;
@@ -72,6 +92,11 @@ public class Double_CircularLinkedList {
          }
 }
 
+    
+    /** 
+     * @param searchValue
+     * @return Object
+     */
     public Object GetNext (Object searchValue) {
         Node current = this.head;
 
@@ -85,6 +110,10 @@ public class Double_CircularLinkedList {
         
     }
 
+    
+    /** 
+     * @return Object
+     */
     public Object GetHead() {
         
         return this.head.getData();
@@ -96,6 +125,11 @@ public class Double_CircularLinkedList {
         this.size = 0;
     }
 
+    
+    /** 
+     * @param searchValue
+     * @return Object
+     */
     public Object GetPrevious (Object searchValue) {
         Node current = this.head;
       

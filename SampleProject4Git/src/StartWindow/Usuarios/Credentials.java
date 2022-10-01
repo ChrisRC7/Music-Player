@@ -61,6 +61,10 @@ public class Credentials extends JFrame implements ActionListener {
 
     }
 
+    
+    /** 
+     * @param e
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         //if the button is pressed
@@ -71,12 +75,14 @@ public class Credentials extends JFrame implements ActionListener {
             BufferedReader csvDataBase;
             BufferedReader csvSolicitud;
 
-
+            String Usuario= username.getText();
+            String Pass= pass.getText();
+            String Path= "SampleProject4Git/src/StartWindow/Usuarios/"+Usuario+".csv";
             try {
                 csvSolicitud = new BufferedReader(new FileReader("SampleProject4Git/src/StartWindow/Usuarios/Solicitudes.csv"));
-                csvDataBase = new BufferedReader(new FileReader("SampleProject4Git/src/StartWindow/Usuarios/Usuarios.csv"));
+                csvDataBase = new BufferedReader(new FileReader(Path));
 
-                String[] lineaSolicitud= {username.getText(),pass.getText()};
+                String[] lineaSolicitud= {Usuario, Pass};
 
                 csvWriter = new CSVWriter(new FileWriter("SampleProject4Git/src/StartWindow/Usuarios/Solicitudes.csv"));
                 csvWriter.writeNext(lineaSolicitud);
@@ -94,7 +100,7 @@ public class Credentials extends JFrame implements ActionListener {
                     System.out.println("Access allowed\n");
                     this.dispose(); //Closes current window
                     try {
-                        Main.VentanaInicio();
+                        Main.VentanaInicio(Path);
                     } catch (IOException e1) {
                         // TODO Auto-generated catch block
                         e1.printStackTrace();

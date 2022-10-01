@@ -9,14 +9,26 @@ public class LinkedList {
         this.size= 0;
     }
 
+    
+    /** 
+     * @return boolean
+     */
     public boolean isEmpty(){
         return this.head==null;
     }
     
+    
+    /** 
+     * @return int
+     */
     public int size(){
         return this.size;
     }
 
+    
+    /** 
+     * @param data
+     */
     public void insertFirst(Object data){
         Node newNode= new Node(data);
         newNode.setNext(this.head);
@@ -24,6 +36,10 @@ public class LinkedList {
         this.size++;
     }
 
+    
+    /** 
+     * @return Node
+     */
     public Node deleFirts(){
         if(this.head!=null){
             Node temp= this.head;
