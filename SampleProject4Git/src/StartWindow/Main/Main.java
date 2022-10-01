@@ -48,6 +48,8 @@ public class Main extends JFrame implements ActionListener {
     private static String Path;
 
     static JCheckBox FavoritaBtn;
+
+    private static Boolean Escribir = false;
   
     JButton Playbtn, Pausebtn, Continuebtn, Stopbtn, AgregarCanciónBtn, EliminarCanciónBtn, 
     AgregarBibliotecaBtn, EliminarBibliotecaBtn, Anteriorbtn, Siguientebtn, Statusbtn, DatosBtn;
@@ -61,76 +63,107 @@ public class Main extends JFrame implements ActionListener {
         } catch (ArduinoExcepcion e) {
              throw new RuntimeException(e);
         }*/
+        int sizeFrame = 80;
+        int varX = sizeFrame;
+        int varY = sizeFrame*2;
+        int varWH = sizeFrame*2;
 
         setLayout(null);
 
         FavoritaBtn= new JCheckBox("Fav");
-        FavoritaBtn.setBounds(120, 85, 70, 50);
+        FavoritaBtn.setBounds(varX*6, (int) (varY*1.5), varWH, varWH/3);
         add(FavoritaBtn);
         FavoritaBtn.addItemListener(new ItemListener() {
 
             @Override
             public void itemStateChanged(ItemEvent e) {
-                //FavoritaBtn.setSelected(false);
-                
+                if(Escribir) {
+                    if(FavoritaBtn.isSelected()) {
+                        AgregarFavorita();
+                    } else {
+                        EliminarFavorita();
+                    }
+                } else {
+                    Escribir= true;
+                }
             }
+            
 
         });
 
         AgregarBibliotecaBtn= new JButton("Agregar Biblioteca");
-        AgregarBibliotecaBtn.setBounds(340, 20, 150 ,50);
+        AgregarBibliotecaBtn.setBounds(varX*2, varY/8, varWH ,varWH/3);
         add(AgregarBibliotecaBtn);
         AgregarBibliotecaBtn.addActionListener(this);
 
+        Stopbtn= new JButton("<html>Detener Biblioteca<html>");
+        Stopbtn.setBounds(varX*2, (int) (varY/1.9), varWH, varWH/3);
+        add(Stopbtn);
+        Stopbtn.addActionListener(this);
+
         EliminarBibliotecaBtn= new JButton("Eliminar Biblioteca");
-        EliminarBibliotecaBtn.setBounds(340, 85, 150, 50);
+        EliminarBibliotecaBtn.setBounds(varX*2, (int) (varY/1.1), varWH, varWH/3);
         add(EliminarBibliotecaBtn);
         EliminarBibliotecaBtn.addActionListener(this);
 
+        JLabel TextBiblioteca = new JLabel("<html>Seleciona la biblioteca<html>");
+        TextBiblioteca.setVisible(true);
+
+        JPanel ContenedorTextBiblioteca= new JPanel();
+        ContenedorTextBiblioteca.add(TextBiblioteca);
+        ContenedorTextBiblioteca.setBounds(varX*2, varY, 135, 20);
+        add(ContenedorTextBiblioteca);
+
+        SeleciónBiblioteca.addActionListener(this);
+        JPanel ContenedorSelecciónBibliotecas = new JPanel();
+        ContenedorSelecciónBibliotecas.setBounds(varX*2, (int) (varY*1.5), varWH, varWH);
+        ContenedorSelecciónBibliotecas.add(SeleciónBiblioteca);
+        add(ContenedorSelecciónBibliotecas);
+
         AgregarCanciónBtn= new JButton("Agregar Canción");
-        AgregarCanciónBtn.setBounds(520, 20, 150, 50);
+        AgregarCanciónBtn.setBounds(varX*10, varY/8, varWH, varWH/3);
         add(AgregarCanciónBtn);
         AgregarCanciónBtn.addActionListener(this);
 
         EliminarCanciónBtn= new JButton("Eliminar Canción");
-        EliminarCanciónBtn.setBounds(520, 85, 150, 50);
+        EliminarCanciónBtn.setBounds(varX*10, (int) (varY/1.1), varWH, varWH/3);
         add(EliminarCanciónBtn);
         EliminarCanciónBtn.addActionListener(this);
 
         Stopbtn= new JButton("<html>Stop<html>");
-        Stopbtn.setBounds(20, 160, 60, 50);
+        Stopbtn.setBounds((varX*2), (int) (varY/1.9), varWH, varWH/3);
         add(Stopbtn);
         Stopbtn.addActionListener(this);
 
         Anteriorbtn= new JButton("<html>Previous Music<html>");
-        Anteriorbtn.setBounds(80, 160, 75, 50);
+        Anteriorbtn.setBounds(varX*4, (int) (varY*1.5), varWH, varWH/3);
         add(Anteriorbtn);
         Anteriorbtn.addActionListener(this);
 
-        Playbtn= new JButton("<html>Play<html>");
-        Playbtn.setBounds(155, 160, 60, 50);
-        add(Playbtn);
-        Playbtn.addActionListener(this);
+        Siguientebtn= new JButton("<html>Next Music<html>");
+        Siguientebtn.setBounds(varX*8, (int) (varY*1.5) , varWH, varWH/3);
+        add(Siguientebtn);
+        Siguientebtn.addActionListener(this);
+
+        Anteriorbtn= new JButton("<html>Previous Music<html>");
+        Anteriorbtn.setBounds(varX*4, (int) (varY*1.5), varWH, varWH/3);
+        add(Anteriorbtn);
+        Anteriorbtn.addActionListener(this);
+
+        Siguientebtn= new JButton("<html>Next Music<html>");
+        Siguientebtn.setBounds(varX*8, (int) (varY*1.5) , varWH, varWH/3);
+        add(Siguientebtn);
+        Siguientebtn.addActionListener(this);
 
         Pausebtn= new JButton("<html>Pause<html>");
-        Pausebtn.setBounds(215, 160, 65, 50);
+        Pausebtn.setBounds(varX*4, varY, varWH, varWH/3);
         add(Pausebtn);
         Pausebtn.addActionListener(this);
 
         Continuebtn= new JButton("<html>Resume<html>");
-        Continuebtn.setBounds(280, 160, 80, 50);
+        Continuebtn.setBounds(varX*8, varY, varWH, varWH/3);
         add(Continuebtn);
         Continuebtn.addActionListener(this);
-
-        Siguientebtn= new JButton("<html>Next Music<html>");
-        Siguientebtn.setBounds(360, 160, 75, 50);
-        add(Siguientebtn);
-        Siguientebtn.addActionListener(this);
-
-        Statusbtn= new JButton("Status");
-        Statusbtn.setBounds(430, 300, 75, 50);
-        add(Statusbtn);
-        Statusbtn.addActionListener(this);
 
         DatosBtn= new JButton("<html>Datos de Canción<html>");
         DatosBtn.setBounds(430, 350, 75, 50);
@@ -138,7 +171,7 @@ public class Main extends JFrame implements ActionListener {
         DatosBtn.addActionListener(this);
 
         JPanel ContenedorVolume= new JPanel();
-        ContenedorVolume.setBounds(10, 210, 450, 90);
+        ContenedorVolume.setBounds((int) (varX*6.0), (int) (varY/(1.25)), 200, 90);
         ContenedorVolume.add(Volume);
         add(ContenedorVolume);
 
@@ -156,26 +189,17 @@ public class Main extends JFrame implements ActionListener {
                 }
             }
             
-        });;
+        });
 
         JLabel Canciona_Selecionada = new JLabel("Sin selecionar");
         Canciona_Selecionada.setVerticalAlignment(JLabel.BOTTOM);
         Canciona_Selecionada.setHorizontalAlignment(JLabel.CENTER);
         add(Canciona_Selecionada);
-        
-        JLabel TextBiblioteca = new JLabel("<html>Seleciona la biblioteca<html>");
-        TextBiblioteca.setVisible(true);
 
-        JPanel ContenedorTextBiblioteca= new JPanel();
-        ContenedorTextBiblioteca.add(TextBiblioteca);
-        ContenedorTextBiblioteca.setBounds(10, 15, 135, 20);
-        add(ContenedorTextBiblioteca);
-        
-        SeleciónBiblioteca.addActionListener(this);
-        JPanel ContenedorSelecciónBibliotecas = new JPanel();
-        ContenedorSelecciónBibliotecas.setBounds(30, 35, 145, 200);
-        ContenedorSelecciónBibliotecas.add(SeleciónBiblioteca);
-        add(ContenedorSelecciónBibliotecas);
+        JPanel ContenedorSelecciónCanción = new JPanel();
+        ContenedorSelecciónCanción.setBounds(varX*10, (int) (varY*1.5), varWH, varWH);
+        ContenedorSelecciónCanción.add(SeleciónCanción);
+        add(ContenedorSelecciónCanción);
 
 
         JLabel TextCanciones= new JLabel("<html>Selecciona la canción<html>");
@@ -185,11 +209,6 @@ public class Main extends JFrame implements ActionListener {
         ContenedorTextCanciones.setBounds(170, 15, 135, 20);
         ContenedorTextCanciones.add(TextCanciones);
         add(ContenedorTextCanciones);
-        
-        JPanel ContenedorSelecciónCanción = new JPanel();
-        ContenedorSelecciónCanción.setBounds(190, 35, 145, 200);
-        ContenedorSelecciónCanción.add(SeleciónCanción);
-        add(ContenedorSelecciónCanción);
 
         BibliotecasDisponibles();
 
@@ -588,7 +607,140 @@ public class Main extends JFrame implements ActionListener {
 
     }
 
+    public static void AgregarFavorita() {
+        CSVWriter csvWriter;
+        BufferedReader archivocsv;
+        String[] datos;
+        int largo_de_datos;
+        int num_datos;
+        String linea;
 
+        try {
+
+            archivocsv = new BufferedReader(new FileReader(Path));
+            //Se lee primero la linea por que CVSWrite la borra inmediadamente cuando se instancia
+            linea= archivocsv.readLine();
+            csvWriter = new CSVWriter(new FileWriter(Path));
+            datos= linea.split(",", -1);
+            largo_de_datos= datos.length;
+            num_datos= 0;
+            String[] Escribir= new String[largo_de_datos];
+
+            //Se rescribe la primera linea para no perderla
+            while(num_datos < largo_de_datos) {
+                Escribir[num_datos]= datos[num_datos].replaceAll("\"", "");
+                num_datos++;
+                
+            }
+            csvWriter.writeNext(Escribir);
+
+            linea= archivocsv.readLine();
+            System.out.println(linea);
+            datos= linea.split(",", -1);
+            largo_de_datos = datos.length;
+            num_datos = 0;
+            System.out.println(largo_de_datos);
+            String[] Escribir2= new String[largo_de_datos+1];
+
+            while (num_datos < largo_de_datos) {
+                Escribir2[num_datos]= datos[num_datos].replaceAll("\"", "");
+                num_datos++;
+            }
+            Escribir2[num_datos]= (String) SeleciónCanción.getSelectedItem();      
+
+            csvWriter.writeNext(Escribir2);
+
+            System.out.println("Se escribio joder");
+            
+             //Se continua escribirndo la demas lineas para no perderlas.
+            while((linea= archivocsv.readLine()) != null ){
+                datos= linea.split(",", -1);
+                largo_de_datos = datos.length;
+                num_datos = 0;
+                String[] Escribir4= new String[largo_de_datos];
+
+                while (num_datos < largo_de_datos) {
+                    Escribir4[num_datos]= datos[num_datos].replaceAll("\"", "");
+                    num_datos++;
+                }                        
+                csvWriter.writeNext(Escribir4);
+            }
+
+            archivocsv.close();
+            csvWriter.close();
+            }catch(Exception ee) {
+                System.out.println("Error al agregar canción a favoritas");
+            }
+    }
+
+    public static void EliminarFavorita() {
+
+        CSVWriter csvWriter;
+        BufferedReader archivocsv;
+        String[] datos;
+        int largo_de_datos;
+        int num_datos;
+        String linea;
+        try{
+            //Se lee primero la linea por que CVSWrite la borra inmediadamente cuando se instancia
+            archivocsv = new BufferedReader(new FileReader(Path));
+            linea= archivocsv.readLine();
+            csvWriter = new CSVWriter(new FileWriter(Path));
+            datos= linea.split(",", -1);
+            largo_de_datos= datos.length;
+            num_datos= 0;
+            String[] Escribir= new String[largo_de_datos];
+
+            while(num_datos < largo_de_datos) {
+                Escribir[num_datos]= datos[num_datos].replaceAll("\"", "");
+                num_datos++;
+                        
+            }
+            csvWriter.writeNext(Escribir);
+
+            linea= archivocsv.readLine();
+            datos= linea.split(",", -1);
+            largo_de_datos = datos.length;
+            num_datos = 0;
+            String[] Escribir2= new String[largo_de_datos-1];
+            String Favorita;
+            Boolean SeEscriobio= false;
+
+            while (num_datos < largo_de_datos) {
+                Favorita= datos[num_datos].replaceAll("\"", "");
+                if (Favorita.equals(SeleciónCanción.getSelectedItem()) && !SeEscriobio){
+                    SeEscriobio = true;
+                } else {
+                    if (SeEscriobio) {
+                        Escribir2[num_datos-1] = Favorita;
+                } else {
+                    Escribir2[num_datos] = Favorita;
+                }
+            }
+            num_datos++;
+            }                           
+            csvWriter.writeNext(Escribir2);
+                    
+
+            while((linea= archivocsv.readLine()) != null ){
+                datos= linea.split(",", -1);
+                largo_de_datos = datos.length;
+                num_datos = 0;
+                String[] Escribir4= new String[largo_de_datos];
+                while (num_datos < largo_de_datos) {
+                        Escribir4[num_datos]= datos[num_datos].replaceAll("\"", "");
+                        num_datos++;
+                }                        
+                csvWriter.writeNext(Escribir4);
+            }
+        
+            csvWriter.close();
+            archivocsv.close();
+
+        } catch(Exception ee) {
+            System.out.println("error");
+        }
+    }
 
     public static boolean EsFavorita() {
         Boolean Valor= false;
@@ -754,7 +906,7 @@ public class Main extends JFrame implements ActionListener {
     public static void VentanaInicio(String Archivo) throws IOException {
         Path= Archivo;
         Main ReproductorVentana = new Main();
-        ReproductorVentana.setBounds(0, 0, 750, 500); //Tamaño provicional, posiblemente cambie
+        ReproductorVentana.setBounds(0, 0, 1250, 500); //Tamaño provicional, posiblemente cambie
         ReproductorVentana.setVisible(true);
         ReproductorVentana.setTitle("CE MP3");
         ReproductorVentana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
